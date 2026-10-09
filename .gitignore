@@ -1,0 +1,43 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor Settings
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.swp
+*~
+
+# Dependencies & Build Outputs
+node_modules/
+dist/
+target/
+*.class
+*.jar
+*.war
+
+# Database files
+data/
+*.mv.db
+*.lock.db
+*.trace.db
+*.db
+
+# Logs
+*.log
+logs/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+!.env.example
+!frontend/.env.example
+!backend/.env.example
+
+# Gemini / Antigravity internal
+.gemini/
