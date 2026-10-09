@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: student-quizz-backend
+    env: docker
+    rootDir: backend
+    plan: free
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_URL
+        fromDatabase:
+          name: student-quizz-db
+          property: connectionString
+      - key: DB_USERNAME
+        fromDatabase:
+          name: student-quizz-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: student-quizz-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        value: ""
+
+databases:
+  - name: student-quizz-db
+    plan: free
+    databaseName: studentquizz
+    user: studentquizz_user
