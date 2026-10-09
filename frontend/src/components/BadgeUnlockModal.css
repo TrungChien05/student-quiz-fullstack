@@ -1,0 +1,74 @@
+.badge-unlock-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow: hidden;
+  background: rgba(24, 12, 48, 0.64);
+  backdrop-filter: blur(10px);
+  animation: badge-overlay-in .25s ease both;
+}
+
+.badge-unlock-card {
+  position: relative;
+  width: min(390px, 100%);
+  padding: 34px 30px 30px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.88);
+  border-radius: 28px;
+  background: linear-gradient(160deg, rgba(255,255,255,.99), rgba(250,245,255,.96));
+  box-shadow: 0 28px 80px rgba(30, 10, 70, .38), inset 0 1px 0 white;
+  animation: badge-card-in .58s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+.badge-unlock-sparkles {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  color: #f59e0b;
+  animation: badge-sparkle 1.2s ease-in-out infinite alternate;
+}
+
+.badge-unlock-kicker {
+  margin: 0 0 16px;
+  color: #7c3aed !important;
+  font-size: .77rem;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.badge-unlock-icon {
+  width: 116px;
+  height: 116px;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  border: 5px solid rgba(255,255,255,.85);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff7c2, #fbbf24 48%, #f97316);
+  box-shadow: 0 14px 36px rgba(245,158,11,.38), 0 0 0 8px rgba(245,158,11,.12);
+  font-size: 3.7rem;
+  animation: badge-icon-float 1.8s ease-in-out infinite;
+}
+
+.badge-unlock-card h2 { margin: 0 0 9px; color: #24113f; font-size: 1.65rem; font-weight: 900; }
+.badge-unlock-card > p:not(.badge-unlock-kicker) { margin: 0 auto 24px; max-width: 300px; color: #64748b; line-height: 1.6; }
+.badge-unlock-card button { width: 100%; padding: 13px 18px; border: 0; border-radius: 14px; background: linear-gradient(135deg,#7c3aed,#a855f7); color: white; font: inherit; font-weight: 800; cursor: pointer; box-shadow: 0 10px 24px rgba(124,58,237,.3); transition: transform .2s, box-shadow .2s; }
+.badge-unlock-card button:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(124,58,237,.4); }
+.badge-unlock-card button:disabled { opacity: .65; cursor: wait; }
+
+.badge-confetti { position: absolute; inset: 0; pointer-events: none; }
+.badge-confetti i { --angle: calc(var(--i) * 15deg); position: absolute; left: 50%; top: 48%; width: 9px; height: 16px; border-radius: 3px; background: hsl(calc(var(--i) * 47), 85%, 60%); animation: badge-confetti-fly 1.6s var(--delay) ease-out infinite; transform: rotate(var(--angle)) translateY(-70px); }
+
+@keyframes badge-overlay-in { from { opacity: 0; } }
+@keyframes badge-card-in { from { opacity: 0; transform: scale(.74) translateY(28px); } }
+@keyframes badge-icon-float { 50% { transform: translateY(-7px) rotate(3deg); } }
+@keyframes badge-sparkle { to { transform: scale(1.22) rotate(16deg); } }
+@keyframes badge-confetti-fly { 0% { opacity: 0; transform: rotate(var(--angle)) translateY(-55px) scale(.4); } 15% { opacity: 1; } 100% { opacity: 0; transform: rotate(var(--angle)) translateY(-48vh) translateX(180px) rotate(480deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-unlock-overlay *, .badge-unlock-overlay *::before, .badge-unlock-overlay *::after { animation: none !important; }
+}

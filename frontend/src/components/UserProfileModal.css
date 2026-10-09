@@ -1,0 +1,440 @@
+/* ═══════════════════════════════════════════════════
+   User Profile Modal — Premium Glassmorphism Design
+═══════════════════════════════════════════════════ */
+
+.upm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(10, 10, 30, 0.6);
+  backdrop-filter: blur(8px);
+  animation: upmOverlayIn 0.2s ease;
+}
+
+@keyframes upmOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.upm-box {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - 32px);
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(124, 58, 237, 0.08),
+    0 30px 80px rgba(0, 0, 0, 0.25),
+    0 10px 30px rgba(124, 58, 237, 0.12);
+  overflow-y: auto;
+  animation: upmBoxIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes upmBoxIn {
+  from { transform: scale(0.85) translateY(20px); opacity: 0; }
+  to   { transform: scale(1) translateY(0);        opacity: 1; }
+}
+
+/* ─ Close Button ─ */
+.upm-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6B7280;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.upm-close:hover {
+  background: #F3F4F6;
+  color: #111827;
+  transform: rotate(90deg);
+}
+
+/* ─ Banner ─ */
+.upm-banner {
+  height: 90px;
+  width: 100%;
+}
+
+/* ─ Body ─ */
+.upm-body {
+  padding: 0 28px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ─ Avatar ─ */
+.upm-avatar-wrap {
+  position: relative;
+  margin-top: -48px;
+  margin-bottom: 14px;
+}
+
+.upm-avatar-img,
+.upm-avatar-placeholder {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  object-fit: cover;
+}
+
+.upm-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.upm-friend-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #10B981;
+  border: 2.5px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+/* ─ Text ─ */
+.upm-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 4px;
+  text-align: center;
+}
+
+.upm-email {
+  font-size: 0.85rem;
+  color: #6B7280;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.upm-about {
+  width: 100%;
+  margin: -4px 0 18px;
+  padding: 13px 14px;
+  box-sizing: border-box;
+  border: 1px solid #ede9fe;
+  border-radius: 13px;
+  background: #fafaff;
+}
+
+.upm-bio {
+  margin: 0 0 10px;
+  color: #334155;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+.upm-about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.upm-about-tags span {
+  border-radius: 9px;
+  padding: 5px 8px;
+  color: #64748b;
+  background: #fff;
+  font-size: 0.73rem;
+}
+
+.upm-about-tags strong { color: #7c3aed; }
+
+.upm-posts {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.upm-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+
+.upm-section-heading h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 0.94rem;
+}
+
+.upm-section-heading span {
+  color: #8b5cf6;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.upm-post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.upm-post {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+  border: 1px solid #e2e8f0;
+  border-radius: 11px;
+  padding: 10px 12px;
+  color: inherit;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.upm-post:hover {
+  border-color: #c4b5fd;
+  background: #faf5ff;
+  transform: translateY(-1px);
+}
+
+.upm-post__title {
+  overflow: hidden;
+  color: #1e293b;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upm-post__meta {
+  color: #94a3b8;
+  font-size: 0.7rem;
+}
+
+.upm-posts-empty {
+  margin: 0;
+  border: 1px dashed #cbd5e1;
+  border-radius: 11px;
+  padding: 13px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.upm-view-profile {
+  width: 100%;
+  margin-top: 9px;
+  border: 0;
+  padding: 5px;
+  color: #7c3aed;
+  background: transparent;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+/* ─ Stats ─ */
+.upm-stats {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  padding: 14px 0;
+  margin-bottom: 20px;
+}
+
+.upm-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.upm-stat-icon {
+  color: #7C3AED;
+  margin-bottom: 2px;
+}
+
+.upm-stat-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #7C3AED;
+  line-height: 1;
+}
+
+.upm-stat-label {
+  font-size: 0.76rem;
+  color: #4B5563;
+  font-weight: 500;
+}
+
+.upm-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: #E5E7EB;
+}
+
+/* ─ Success message ─ */
+.upm-success-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: #ECFDF5;
+  border: 1px solid #6EE7B7;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #059669;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─ Actions ─ */
+.upm-actions {
+  width: 100%;
+}
+
+.upm-self-badge {
+  text-align: center;
+  color: #4B5563;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 10px;
+}
+
+/* ─ Buttons ─ */
+.upm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+}
+
+.upm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.upm-btn-primary {
+  background: linear-gradient(135deg, #7C3AED, #8B5CF6);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+}
+.upm-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6D28D9, #7C3AED);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+}
+.upm-btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.upm-btn-outline-muted {
+  background: #F3F4F6;
+  color: #6B7280;
+  border: 1.5px solid #E5E7EB;
+}
+.upm-btn-outline-muted:hover:not(:disabled) {
+  background: #E5E7EB;
+  color: #374151;
+}
+
+.upm-btn-danger-outline {
+  background: transparent;
+  color: #EF4444;
+  border: 1.5px solid #FECACA;
+}
+.upm-btn-danger-outline:hover:not(:disabled) {
+  background: #FEF2F2;
+  border-color: #EF4444;
+}
+
+.upm-btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+/* ─ Spinner ─ */
+.upm-spinner {
+  animation: spin 0.8s linear infinite;
+}
+.upm-spinner-sm {
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─ Loading / Error ─ */
+.upm-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 60px 20px;
+  color: #6B7280;
+}
+
+.upm-error {
+  text-align: center;
+  padding: 30px;
+  color: #EF4444;
+}
+
+@media (max-width: 560px) {
+  .upm-overlay { align-items: flex-end; padding: 10px; }
+  .upm-box { max-height: calc(100vh - 10px); border-radius: 22px 22px 12px 12px; }
+  .upm-body { padding: 0 18px 22px; }
+  .upm-post__meta { line-height: 1.4; }
+}

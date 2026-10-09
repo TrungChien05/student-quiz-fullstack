@@ -1,0 +1,111 @@
+.appeal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.appeal-box {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  padding: 28px 24px 24px;
+  background: var(--card-bg);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
+}
+
+.appeal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--border-radius-full);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.appeal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.appeal-item {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.appeal-reject-box {
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border-radius: var(--border-radius);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  font-size: 0.88rem;
+}
+
+.appeal-reject-box strong {
+  display: block;
+  color: #b91c1c;
+  margin-bottom: 6px;
+}
+
+.appeal-reject-box p {
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.appeal-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.appeal-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius);
+  resize: vertical;
+}
+
+.appeal-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.appeal-char {
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 4px 0 12px;
+}
+
+.appeal-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+}
+
+.appeal-submit {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
