@@ -38,6 +38,10 @@ export const battleService = {
 };
 
 export const getBattleSocketUrl = () => {
-  const apiBase = String(api.defaults.baseURL || 'http://localhost:8080/api');
-  return apiBase.replace(/^http/, 'ws').replace(/\/api\/?$/, '') + '/ws-battle';
+  const apiBase = String(api.defaults.baseURL || '/api');
+  if (apiBase.startsWith('http')) {
+    return apiBase.replace(/^http/, 'ws').replace(/\/api\/?$/, '') + '/ws-battle';
+  }
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  return `${protocol}//${window.location.host}/ws-battle`;
 };

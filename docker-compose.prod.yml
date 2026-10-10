@@ -1,0 +1,62 @@
+# ==============================================================================
+# Docker Compose Production — Dành cho Máy ảo Azure VM (Ubuntu)
+# Sử dụng Docker Image đã được GitHub Actions đóng gói sẵn trên GHCR
+# ==============================================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: student-quiz-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-studentquizz}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-studentquizz}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - studentquizz-network
+
+  backend:
+    image: ghcr.io/trungchien05/student-quiz-backend:latest
+    container_name: student-quiz-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DATABASE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-studentquizz}
+      DB_USERNAME: ${POSTGRES_USER:-postgres}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password}
+      JWT_SECRET: ${JWT_SECRET:-studentquizz_prod_secret_key_must_be_at_least_256_bits_long}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-dqy5ubmde}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-345989556296772}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-qPf9vTa7q9ecwlIsDaNRGVa-1-o}
+    networks:
+      - studentquizz-network
+
+  frontend:
+    image: ghcr.io/trungchien05/student-quiz-frontend:latest
+    container_name: student-quiz-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    networks:
+      - studentquizz-network
+
+networks:
+  studentquizz-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

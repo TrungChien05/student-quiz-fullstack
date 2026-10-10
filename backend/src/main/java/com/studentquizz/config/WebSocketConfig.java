@@ -27,11 +27,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-battle")
-                .setAllowedOriginPatterns(
-                        "http://localhost:*",
-                        "https://*.vercel.app",
-                        "https://studentquizz-web.vercel.app"
-                );
+                .setAllowedOriginPatterns("*");
     }
 
     @Override
