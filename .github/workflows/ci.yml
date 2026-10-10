@@ -92,54 +92,36 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-and-push-ghcr]
     if: github.event_name != 'pull_request'
-    env:
-      VPS_HOST: ${{ secrets.VPS_HOST }}
     steps:
       - name: Checkout repository
-        if: env.VPS_HOST != ''
         uses: actions/checkout@v4
 
-      - name: Prepare Azure VM (Auto-install Docker & Create Directory)
-        if: env.VPS_HOST != ''
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          script: |
-            if ! command -v docker &> /dev/null; then
-              curl -fsSL https://get.docker.com | sudo sh
-              sudo usermod -aG docker $USER
-            fi
-            sudo mkdir -p /opt/student-quiz
-            sudo chown -R $USER:$USER /opt/student-quiz
-            if [ ! -f /opt/student-quiz/.env ]; then
-              printf "POSTGRES_DB=studentquizz\nPOSTGRES_USER=postgres\nPOSTGRES_PASSWORD=MatKhauDatabaseCucManh2026\nJWT_SECRET=KhoaBiMatJwtChoMayAoAzurePhaiDaiItNhat256BitsTroLen2026\nGEMINI_API_KEY=\n" > /opt/student-quiz/.env
-            fi
-
       - name: Copy docker-compose.prod.yml to Azure VM
-        if: env.VPS_HOST != ''
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          password: ${{ secrets.VPS_PASSWORD }}
           source: "docker-compose.prod.yml"
           target: "/opt/student-quiz"
 
       - name: Pull Latest Images & Restart Containers on Azure VM
-        if: env.VPS_HOST != ''
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          password: ${{ secrets.VPS_PASSWORD }}
           script: |
+            if ! docker info >/dev/null 2>&1; then
+              echo "${{ secrets.VPS_PASSWORD }}" | sudo -S sh -c 'echo "$USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USER && chmod 440 /etc/sudoers.d/$USER' || true
+              echo "${{ secrets.VPS_PASSWORD }}" | sudo -S systemctl reset-failed docker.socket docker.service || true
+              echo "${{ secrets.VPS_PASSWORD }}" | sudo -S systemctl restart containerd docker || true
+            fi
             cd /opt/student-quiz
-            echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            sudo docker compose -f docker-compose.prod.yml pull
-            sudo docker compose -f docker-compose.prod.yml up -d
-            sudo docker image prune -f
+            if [ ! -f /opt/student-quiz/.env ]; then
+              printf "POSTGRES_DB=studentquizz\nPOSTGRES_USER=postgres\nPOSTGRES_PASSWORD=MatKhauDatabaseCucManh2026\nJWT_SECRET=KhoaBiMatJwtChoMayAoAzurePhaiDaiItNhat256BitsTroLen2026\nGEMINI_API_KEY=\n" > /opt/student-quiz/.env
+            fi
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d
+            docker image prune -f
