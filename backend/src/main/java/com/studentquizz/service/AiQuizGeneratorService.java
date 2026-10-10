@@ -35,7 +35,7 @@ public class AiQuizGeneratorService {
     @Value("${gemini.api.key:}")
     private String apiKey;
 
-    @Value("${gemini.models:gemini-3.6-flash,gemini-flash-latest,gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3.5-flash,gemini-pro-latest}")
+    @Value("${gemini.models:gemini-flash-lite-latest,gemini-flash-latest,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3.5-flash,gemini-pro-latest}")
     private String configuredModels;
 
     private final RestTemplate restTemplate;
@@ -92,7 +92,9 @@ public class AiQuizGeneratorService {
                     lastFailure = describeProviderError(ex);
                     log.warn("Gemini model {} ({}) trả về HTTP {}: {}", model, urlTemplate, ex.getStatusCode().value(), lastFailure);
 
-                    if (ex.getStatusCode().value() == 401 || ex.getStatusCode().value() == 403) {
+                    String body = ex.getResponseBodyAsString();
+                    boolean isHtml403 = ex.getStatusCode().value() == 403 && body != null && body.trim().startsWith("<");
+                    if (ex.getStatusCode().value() == 401 || (ex.getStatusCode().value() == 403 && !isHtml403)) {
                         throw new RuntimeException("Không thể tạo quiz bằng AI. " + lastFailure);
                     }
                 } catch (RestClientException ex) {

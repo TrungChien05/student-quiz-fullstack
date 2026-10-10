@@ -38,7 +38,7 @@ public class GeminiLearningAssistantService {
     @Value("${gemini.api.key:}")
     private String apiKey;
 
-    @Value("${gemini.models:gemini-3.6-flash,gemini-flash-latest,gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3.5-flash,gemini-pro-latest}")
+    @Value("${gemini.models:gemini-flash-lite-latest,gemini-flash-latest,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3.5-flash,gemini-pro-latest}")
     private String configuredModels;
 
     private final RestTemplate restTemplate;
@@ -196,7 +196,9 @@ public class GeminiLearningAssistantService {
                 } catch (RestClientResponseException exception) {
                     lastFailure = providerError(exception);
                     log.warn("Gemini learning model {} ({}) returned HTTP {}: {}", model, urlTemplate, exception.getStatusCode().value(), lastFailure);
-                    if (exception.getStatusCode().value() == 401 || exception.getStatusCode().value() == 403) {
+                    String body = exception.getResponseBodyAsString();
+                    boolean isHtml403 = exception.getStatusCode().value() == 403 && body != null && body.trim().startsWith("<");
+                    if (exception.getStatusCode().value() == 401 || (exception.getStatusCode().value() == 403 && !isHtml403)) {
                         throw new RuntimeException("Không thể sử dụng trợ lý AI. " + lastFailure);
                     }
                 } catch (RestClientException exception) {

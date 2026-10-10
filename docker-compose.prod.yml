@@ -22,6 +22,20 @@ services:
     networks:
       - studentquizz-network
 
+  gemini-proxy:
+    image: alpine:latest
+    container_name: gemini-proxy
+    restart: unless-stopped
+    command: >
+      sh -c "apk add --no-cache tor >/dev/null &&
+      mkdir -p /var/lib/tor && chown -R root:root /var/lib/tor && chmod 700 /var/lib/tor &&
+      printf 'DataDirectory /var/lib/tor\nSocksPort 0.0.0.0:9050 NoIsolateClientAddr\nHTTPTunnelPort 0.0.0.0:8118 NoIsolateClientAddr\nExitNodes 194.15.115.212,{jp},{sg},{tw}\nMaxCircuitDirtiness 86400\n' > /etc/tor/torrc &&
+      tor -f /etc/tor/torrc"
+    volumes:
+      - tor_data:/var/lib/tor
+    networks:
+      - studentquizz-network
+
   backend:
     image: ghcr.io/trungchien05/student-quiz-backend:latest
     container_name: student-quiz-backend
@@ -29,6 +43,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      gemini-proxy:
+        condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: prod
       DATABASE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-studentquizz}
@@ -36,6 +52,8 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password}
       JWT_SECRET: ${JWT_SECRET:-studentquizz_prod_secret_key_must_be_at_least_256_bits_long}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODELS: ${GEMINI_MODELS:-gemini-flash-lite-latest,gemini-flash-latest,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3.5-flash}
+      JAVA_TOOL_OPTIONS: "-Dhttps.proxyHost=gemini-proxy -Dhttps.proxyPort=8118 -Dhttp.nonProxyHosts=localhost|127.*|[::1]|postgres|backend|frontend"
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-dqy5ubmde}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-345989556296772}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-qPf9vTa7q9ecwlIsDaNRGVa-1-o}
@@ -59,4 +77,6 @@ networks:
 
 volumes:
   postgres_data:
+    driver: local
+  tor_data:
     driver: local
