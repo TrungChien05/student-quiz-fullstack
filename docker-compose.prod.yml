@@ -84,7 +84,7 @@ services:
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME:-studentedu.app}
     command: >
-      sh -c "printf '{$DOMAIN_NAME} {\n    encode gzip zstd\n    reverse_proxy frontend:80\n}\n\nwww.{$DOMAIN_NAME} {\n    redir https://{$DOMAIN_NAME}{uri} permanent\n}\n\n:80 {\n    reverse_proxy frontend:80\n}\n' > /etc/caddy/Caddyfile &&
+      sh -c "printf '{$$DOMAIN_NAME} {\n    encode gzip zstd\n    reverse_proxy frontend:80\n}\n\nwww.{$$DOMAIN_NAME} {\n    redir https://{$$DOMAIN_NAME}{uri} permanent\n}\n\n:80 {\n    reverse_proxy frontend:80\n}\n' > /etc/caddy/Caddyfile &&
       exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"
     volumes:
       - caddy_data:/data
