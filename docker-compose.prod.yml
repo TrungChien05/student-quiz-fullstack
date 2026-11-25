@@ -66,8 +66,29 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+    expose:
+      - "80"
+    networks:
+      - studentquizz-network
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: student-quiz-caddy
+    restart: unless-stopped
+    depends_on:
+      - frontend
     ports:
-      - "${FRONTEND_PORT:-80}:80"
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME:-studentedu.app}
+    command: >
+      sh -c "printf '{$DOMAIN_NAME} {\n    encode gzip zstd\n    reverse_proxy frontend:80\n}\n\nwww.{$DOMAIN_NAME} {\n    redir https://{$DOMAIN_NAME}{uri} permanent\n}\n\n:80 {\n    reverse_proxy frontend:80\n}\n' > /etc/caddy/Caddyfile &&
+      exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
     networks:
       - studentquizz-network
 
@@ -79,4 +100,8 @@ volumes:
   postgres_data:
     driver: local
   tor_data:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
     driver: local
